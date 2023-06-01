@@ -49,11 +49,12 @@ public class SpotifyController {
         //Create a playlist with given title and add all songs having the given length in the database to that playlist
         //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
         //If the user does not exist, throw "User does not exist" exception
-        Playlist playlist=spotifyService.createPlaylistOnLength(mobile,title,length);
         Optional<User> userOptional=spotifyService.findUser(mobile);
         if(userOptional.isEmpty()){
             throw new RuntimeException("User does not exist");
         }
+        Playlist playlist=spotifyService.createPlaylistOnLength(mobile,title,length);
+
         return "Success";
     }
 
@@ -62,6 +63,11 @@ public class SpotifyController {
         //Create a playlist with given title and add all songs having the given titles in the database to that playlist
         //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
         //If the user does not exist, throw "User does not exist" exception
+        Optional<User> userOptional=spotifyService.findUser(mobile);
+        if(userOptional.isEmpty()){
+            throw new RuntimeException("User does not exist");
+        }
+        Playlist playlist=spotifyService.createPlaylistOnName(mobile,title,songTitles);
 
         return "Success";
     }
@@ -73,7 +79,15 @@ public class SpotifyController {
         //If the user does not exist, throw "User does not exist" exception
         //If the playlist does not exists, throw "Playlist does not exist" exception
         // Return the playlist after updating
-
+        Playlist playlist=spotifyService.findPlaylist(mobile,playlistTitle);
+        if(Objects.isNull(playlist)){
+            throw new RuntimeException("Playlist does not exist");
+        }
+        Optional<User> userOptional=spotifyService.findUser(mobile);
+        if(userOptional.isEmpty()){
+            throw new RuntimeException("User does not exist");
+        }
+        spotifyService.addaslistener(mobile,playlistTitle);
         return "Success";
     }
 
@@ -85,7 +99,15 @@ public class SpotifyController {
         //If the user does not exist, throw "User does not exist" exception
         //If the song does not exist, throw "Song does not exist" exception
         //Return the song after updating
-
+        Optional<User> userOptional=spotifyService.findUser(mobile);
+        if(userOptional.isEmpty()){
+            throw new RuntimeException("User does not exist");
+        }
+        Optional<Song> songOptional=spotifyService.findSong(songTitle);
+        if (songOptional.isEmpty()){
+            throw new RuntimeException("Song does not exist");
+        }
+        Song song=spotifyService.likeSong(mobile,songTitle);
         return "Success";
     }
 

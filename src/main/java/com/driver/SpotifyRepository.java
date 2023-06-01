@@ -69,21 +69,69 @@ public class SpotifyRepository {
         return song;
     }
 
-//    public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
-//
-//    }
-//
-//    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
-//
-//    }
-//
-//    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
-//
-//    }
-//
-//    public Song likeSong(String mobile, String songTitle) throws Exception {
-//
-//    }
+    public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
+        List<Song> songList=new ArrayList<>();
+        for(Song song:songs){
+            if(song.getLength()==length){
+                songList.add(song);
+            }
+        }
+        Playlist playlist=new Playlist(title);
+        playlists.add(playlist);
+        playlistSongMap.put(playlist,songList);
+        Optional<User> userOptional=findUser(mobile);
+        List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
+        userList.add(userOptional.get());
+        playlistListenerMap.put(playlist,userList);
+        creatorPlaylistMap.put(userOptional.get(),playlist);
+        List<Playlist> playlistList=userPlaylistMap.getOrDefault(userOptional.get(),new ArrayList<>());
+        playlistList.add(playlist);
+        userPlaylistMap.put(userOptional.get(),playlistList);
+        return playlist;
+    }
+
+    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
+            Playlist playlist=new Playlist(title);
+            playlists.add(playlist);
+            List<Song>songList=new ArrayList<>();
+            for(String Songtitle:songTitles){
+                for (Song song:songs){
+                    if(Songtitle.equals(song.getTitle())){
+                        songList.add(song);
+                    }
+                }
+            }
+            playlistSongMap.put(playlist,songList);
+           Optional<User> userOptional=findUser(mobile);
+        List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
+        userList.add(userOptional.get());
+        playlistListenerMap.put(playlist,userList);
+            creatorPlaylistMap.put(userOptional.get(),playlist);
+           List<Playlist> playlistList=userPlaylistMap.getOrDefault(userOptional.get(),new ArrayList<>());
+           playlistList.add(playlist);
+            userPlaylistMap.put(userOptional.get(),playlistList);
+            return playlist;
+    }
+
+    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
+        for(Playlist playlist:playlists){
+            if(playlist.getTitle().equals(playlistTitle)){
+                return playlist;
+            }
+        }
+        return null;
+
+    }
+
+    public Song likeSong(String mobile, String songTitle) throws Exception {
+         Optional<User>userOptional=findUser(mobile);
+         Optional<Song>songOptional=findSong(songTitle);
+         Song song=songOptional.get();
+         songs.remove(song);
+         song.setLikes(song.getLikes()+1);
+         songs.add(song);
+         return songOptional.get();
+    }
 
     public String mostPopularArtist() {
         return "null";
@@ -113,22 +161,22 @@ public class SpotifyRepository {
 
 
 
-    public Playlist CreatePlayList(String title,int length,String mobile) {
-        List<Song> songList=new ArrayList<>();
-        for(Song song:songs){
-            if(song.getLength()==length){
-                songList.add(song);
-            }
-        }
-        Playlist playlist=new Playlist(title);
-        playlists.add(playlist);
-        playlistSongMap.put(playlist,songList);
-        Optional<User> userOptional=findUser(mobile);
-        List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
-        userList.add(userOptional.get());
-        playlistListenerMap.put(playlist,userList);
-        return playlist;
-    }
+//    public Playlist CreatePlayList(String title,int length,String mobile) {
+//        List<Song> songList=new ArrayList<>();
+//        for(Song song:songs){
+//            if(song.getLength()==length){
+//                songList.add(song);
+//            }
+//        }
+//        Playlist playlist=new Playlist(title);
+//        playlists.add(playlist);
+//        playlistSongMap.put(playlist,songList);
+//        Optional<User> userOptional=findUser(mobile);
+//        List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
+//        userList.add(userOptional.get());
+//        playlistListenerMap.put(playlist,userList);
+//        return playlist;
+//    }
 
     public Optional<User> findUser(String mobile) {
         for(User user:users){
@@ -137,5 +185,29 @@ public class SpotifyRepository {
             }
         }
         return Optional.empty();
+    }
+
+    public void addAsListener(String mobile, String playlistTitle) throws Exception {
+        Optional<User> userOptional=findUser(mobile);
+        Playlist playlist=findPlaylist(mobile,playlistTitle);
+//        public HashMap<Playlist, List<User>> playlistListenerMap;
+//        public HashMap<User, Playlist> creatorPlaylistMap;
+//        public HashMap<User, List<Playlist>> userPlaylistMap;
+        List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
+        userList.add(userOptional.get());
+        playlistListenerMap.put(playlist,userList);
+        creatorPlaylistMap.put(userOptional.get(),playlist);
+        List<Playlist> playlistList=userPlaylistMap.getOrDefault(userOptional.get(),new ArrayList<>());
+        playlistList.add(playlist);
+        userPlaylistMap.put(userOptional.get(),playlistList);
+    }
+
+    public Optional<Song> findSong(String songTitle) {
+      for(Song song:songs){
+          if(song.equals(songTitle)){
+              return Optional.of(song);
+          }
+      }
+      return  Optional.empty();
     }
 }
