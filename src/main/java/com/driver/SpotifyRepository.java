@@ -148,7 +148,8 @@ public class SpotifyRepository {
              user=userOptional.get();
          }
          Optional<Song>songOptional=findSong(songTitle);
-         Song song=songOptional.get();
+         Song song=null;
+         if(songOptional.isPresent()) song=songOptional.get();
 
       //  public HashMap<Artist, List<Album>> artistAlbumMap;
        // public HashMap<Album, List<Song>> albumSongMap;
