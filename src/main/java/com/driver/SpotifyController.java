@@ -14,14 +14,14 @@ public class SpotifyController {
     @PostMapping("/add-user")
     public String createUser(@RequestParam(name = "name") String name, String mobile){
         //create the user with given name and number
-        spotifyService.createUser(name,mobile);
+        User user=spotifyService.createUser(name,mobile);
         return "Success";
     }
 
     @PostMapping("/add-artist")
     public String createArtist(@RequestParam(name = "name") String name){
         //create the artist with given name
-        spotifyService.createArtist(name);
+        Artist artist=spotifyService.createArtist(name);
         return "Success";
     }
 
