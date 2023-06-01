@@ -66,28 +66,31 @@ public class SpotifyRepository {
         List<Song> songList=albumSongMap.getOrDefault(albumOptional.get(),new ArrayList<>());
         songList.add(song);
         albumSongMap.put(albumOptional.get(),songList);
+        return song;
     }
 
-    public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
-
-    }
-
-    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
-
-    }
-
-    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
-
-    }
-
-    public Song likeSong(String mobile, String songTitle) throws Exception {
-
-    }
+//    public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
+//
+//    }
+//
+//    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
+//
+//    }
+//
+//    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
+//
+//    }
+//
+//    public Song likeSong(String mobile, String songTitle) throws Exception {
+//
+//    }
 
     public String mostPopularArtist() {
+        return "null";
     }
 
     public String mostPopularSong() {
+        return "null";
     }
 
     public Optional<Artist> findArtist(String artistName) {
@@ -102,10 +105,10 @@ public class SpotifyRepository {
     public Optional<Album> findAlbum(String albumName) {
         for(Album album:albums){
             if(album.getTitle().equals(albumName)){
-                Optional.of(album);
+                return Optional.of(album);
             }
         }
-        Optional.empty();
+       return Optional.empty();
     }
 
 
@@ -133,6 +136,6 @@ public class SpotifyRepository {
                 return Optional.of(user);
             }
         }
-        Optional.empty();
+        return Optional.empty();
     }
 }

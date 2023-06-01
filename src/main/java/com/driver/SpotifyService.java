@@ -26,7 +26,8 @@ public class SpotifyService {
         if(artist.isEmpty()){
             createArtist(artistName);
         }
-        spotifyRepository.createAlbum(title,artistName);
+        return spotifyRepository.createAlbum(title,artistName);
+
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception {
@@ -41,24 +42,24 @@ public class SpotifyService {
        return playlist;
     }
 
-    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
-
-    }
-
-    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
-
-    }
-
-    public Song likeSong(String mobile, String songTitle) throws Exception {
-
-    }
+//    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
+//
+//    }
+//
+//    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
+//
+//    }
+//
+//    public Song likeSong(String mobile, String songTitle) throws Exception {
+//
+//    }
 
     public String mostPopularArtist() {
-
+       return "null";
     }
 
     public String mostPopularSong() {
-
+       return "null";
     }
 
     public boolean findAlbum(String albumName) {
