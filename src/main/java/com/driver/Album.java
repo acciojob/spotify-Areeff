@@ -6,9 +6,18 @@ import java.util.List;
 public class Album {
     private String title;
     private Date releaseDate;
+    private String artistName;
 
     public Album(){
 
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
     public Album(String title){
