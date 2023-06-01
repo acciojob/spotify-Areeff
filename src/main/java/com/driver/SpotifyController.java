@@ -40,7 +40,7 @@ public class SpotifyController {
             throw new RuntimeException("Album does not exist");
         }
         //Create and add the song to respective album
-        spotifyService.createSong(title,albumName,length);
+        Song song=spotifyService.createSong(title,albumName,length);
         return "Success";
     }
 
