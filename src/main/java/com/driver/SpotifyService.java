@@ -46,7 +46,7 @@ public class SpotifyService {
           return spotifyRepository.createPlaylistOnName(mobile,title,songTitles);
     }
 
-    public Optional<Playlist> findPlaylist(String mobile, String playlistTitle) throws Exception {
+    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
            return  spotifyRepository.findPlaylist(mobile,playlistTitle);
     }
 

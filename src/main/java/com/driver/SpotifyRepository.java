@@ -53,14 +53,15 @@ public class SpotifyRepository {
         Album album=new Album(title);
         albums.add(album);
         List<Album> albumsList =new ArrayList<>();
-        if(artistAlbumMap.containsKey(artistName)){
-           albumsList=artistAlbumMap.get(artistName);
-        }
-       // List<Album> albumsList=new ArrayList<>();
-        albumsList.add(album);
         Optional<Artist> artist=findArtist(artistName);
         Artist artist1 = null;
         if(artist.isPresent()) artist1 = artist.get();
+        if(artistAlbumMap.containsKey(artist1)){
+           albumsList=artistAlbumMap.get(artist1);
+        }
+       // List<Album> albumsList=new ArrayList<>();
+        albumsList.add(album);
+
         artistAlbumMap.put(artist1,albumsList);
         return album;
     }
@@ -131,13 +132,13 @@ public class SpotifyRepository {
             return playlist;
     }
 
-    public Optional<Playlist> findPlaylist(String mobile, String playlistTitle) throws Exception {
+    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
         for(Playlist playlist:playlists){
             if(playlist.getTitle().equals(playlistTitle)){
-                return Optional.of(playlist);
+                return playlist;
             }
         }
-        return Optional.empty();
+        return null;
 
     }
 
@@ -255,11 +256,8 @@ public class SpotifyRepository {
         if(userOptional.isPresent()){
             user=userOptional.get();
         }
-        Playlist playlist=null;
-        Optional<Playlist>playlistOptional=findPlaylist(mobile,playlistTitle);
-        if(playlistOptional.isPresent()){
-            playlist=playlistOptional.get();
-        }
+
+        Playlist playlist =findPlaylist(mobile,playlistTitle);
 //        public HashMap<Playlist, List<User>> playlistListenerMap;
 //        public HashMap<User, Playlist> creatorPlaylistMap;
 //        public HashMap<User, List<Playlist>> userPlaylistMap;
