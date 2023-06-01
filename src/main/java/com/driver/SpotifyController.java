@@ -83,8 +83,8 @@ public class SpotifyController {
         if(userOptional.isEmpty()){
             throw new RuntimeException("User does not exist");
         }
-        Playlist playlist=spotifyService.findPlaylist(mobile,playlistTitle);
-        if(Objects.isNull(playlist)){
+        Optional<Playlist>playlist=spotifyService.findPlaylist(mobile,playlistTitle);
+        if(playlist.isEmpty()){
             throw new RuntimeException("Playlist does not exist");
         }
         spotifyService.addaslistener(mobile,playlistTitle);

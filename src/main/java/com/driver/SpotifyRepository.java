@@ -131,13 +131,13 @@ public class SpotifyRepository {
             return playlist;
     }
 
-    public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
+    public Optional<Playlist> findPlaylist(String mobile, String playlistTitle) throws Exception {
         for(Playlist playlist:playlists){
             if(playlist.getTitle().equals(playlistTitle)){
-                return playlist;
+                return Optional.of(playlist);
             }
         }
-        return null;
+        return Optional.empty();
 
     }
 
@@ -157,20 +157,22 @@ public class SpotifyRepository {
         for(Map.Entry<Album,List<Song>> map:albumSongMap.entrySet()){
             if(map.getValue().contains(song)){
                 album=map.getKey();
+                break;
             }
         }
         Artist artist=null;
         for(Map.Entry<Artist,List<Album>> Hashmap:artistAlbumMap.entrySet()){
             if(Hashmap.getValue().contains(album)){
                 artist=Hashmap.getKey();
+                break;
             }
         }
-        songs.remove(song);
+        //songs.remove(song);
         song.setLikes(song.getLikes()+1);
-        songs.add(song);
-        artists.remove(artist);
+        //songs.add(song);
+        //artists.remove(artist);
         artist.setLikes(artist.getLikes()+1);
-        artists.add(artist);
+        //artists.add(artist);
         List<User> userList=songLikeMap.getOrDefault(song,new ArrayList<>());
         userList.add(user);
         songLikeMap.put(song,userList);
@@ -253,7 +255,11 @@ public class SpotifyRepository {
         if(userOptional.isPresent()){
             user=userOptional.get();
         }
-        Playlist playlist=findPlaylist(mobile,playlistTitle);
+        Playlist playlist=null;
+        Optional<Playlist>playlistOptional=findPlaylist(mobile,playlistTitle);
+        if(playlistOptional.isPresent()){
+            playlist=playlistOptional.get();
+        }
 //        public HashMap<Playlist, List<User>> playlistListenerMap;
 //        public HashMap<User, Playlist> creatorPlaylistMap;
 //        public HashMap<User, List<Playlist>> userPlaylistMap;
