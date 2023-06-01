@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Album {
     private String title;
-    private Artist artist;
     private Date releaseDate;
 
     public Album(){
@@ -14,19 +13,9 @@ public class Album {
 
 
 
-    public Album(String title, Artist artist) {
-        this.title = title;
-        this.artist = artist;
-        this.releaseDate=new Date();
-    }
 
-    public Artist getArtist() {
-        return artist;
-    }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
-    }
+
 
     public Album(String title){
         this.title = title;

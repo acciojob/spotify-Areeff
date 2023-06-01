@@ -24,7 +24,7 @@ public class SpotifyService {
         //Create an album with given title and artist
         Optional<Artist> artist=spotifyRepository.findArtist(artistName);
         if(artist.isEmpty()){
-            createArtist(artistName);
+            spotifyRepository.createArtist(artistName);
         }
         return spotifyRepository.createAlbum(title,artistName);
 
