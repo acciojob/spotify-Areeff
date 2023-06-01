@@ -216,12 +216,19 @@ public class SpotifyRepository {
 //        public HashMap<User, Playlist> creatorPlaylistMap;
 //        public HashMap<User, List<Playlist>> userPlaylistMap;
         List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
-        userList.add(user);
-        playlistListenerMap.put(playlist,userList);
-        creatorPlaylistMap.put(user,playlist);
+        if(!playlistListenerMap.containsKey(playlist)){
+            userList.add(user);
+            playlistListenerMap.put(playlist,userList);
+        }
+        if(!creatorPlaylistMap.containsKey(user)){
+            creatorPlaylistMap.put(user,playlist);
+        }
         List<Playlist> playlistList=userPlaylistMap.getOrDefault(user,new ArrayList<>());
-        playlistList.add(playlist);
-        userPlaylistMap.put(user,playlistList);
+        if(!playlistList.contains(user)){
+            playlistList.add(playlist);
+            userPlaylistMap.put(user,playlistList);
+        }
+
     }
 
     public Optional<Song> findSong(String songTitle) {
