@@ -69,9 +69,13 @@ public class SpotifyRepository {
         Song song=new Song(title,length);
         songs.add(song);
         Optional<Album>albumOptional=findAlbum(albumName);
-        List<Song> songList=albumSongMap.getOrDefault(albumOptional.get(),new ArrayList<>());
+        Album album=null;
+        if(albumOptional.isPresent()){
+            album=albumOptional.get();
+        }
+        List<Song> songList=albumSongMap.getOrDefault(album,new ArrayList<>());
         songList.add(song);
-        albumSongMap.put(albumOptional.get(),songList);
+        albumSongMap.put(album,songList);
         return song;
     }
 
@@ -86,13 +90,17 @@ public class SpotifyRepository {
         playlists.add(playlist);
         playlistSongMap.put(playlist,songList);
         Optional<User> userOptional=findUser(mobile);
+        User user=null;
+        if(userOptional.isPresent()){
+            user=userOptional.get();
+        }
         List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
-        userList.add(userOptional.get());
+        userList.add(user);
         playlistListenerMap.put(playlist,userList);
-        creatorPlaylistMap.put(userOptional.get(),playlist);
-        List<Playlist> playlistList=userPlaylistMap.getOrDefault(userOptional.get(),new ArrayList<>());
+        creatorPlaylistMap.put(user,playlist);
+        List<Playlist> playlistList=userPlaylistMap.getOrDefault(user,new ArrayList<>());
         playlistList.add(playlist);
-        userPlaylistMap.put(userOptional.get(),playlistList);
+        userPlaylistMap.put(user,playlistList);
         return playlist;
     }
 
@@ -109,13 +117,17 @@ public class SpotifyRepository {
             }
             playlistSongMap.put(playlist,songList);
            Optional<User> userOptional=findUser(mobile);
+           User user=null;
+           if(userOptional.isPresent()){
+               user=userOptional.get();
+           }
         List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
-        userList.add(userOptional.get());
+        userList.add(user);
         playlistListenerMap.put(playlist,userList);
-            creatorPlaylistMap.put(userOptional.get(),playlist);
-           List<Playlist> playlistList=userPlaylistMap.getOrDefault(userOptional.get(),new ArrayList<>());
+            creatorPlaylistMap.put(user,playlist);
+           List<Playlist> playlistList=userPlaylistMap.getOrDefault(user,new ArrayList<>());
            playlistList.add(playlist);
-            userPlaylistMap.put(userOptional.get(),playlistList);
+            userPlaylistMap.put(user,playlistList);
             return playlist;
     }
 
@@ -136,7 +148,7 @@ public class SpotifyRepository {
          songs.remove(song);
          song.setLikes(song.getLikes()+1);
          songs.add(song);
-         return songOptional.get();
+         return song;
     }
 
     public String mostPopularArtist() {
@@ -195,17 +207,21 @@ public class SpotifyRepository {
 
     public void addAsListener(String mobile, String playlistTitle) throws Exception {
         Optional<User> userOptional=findUser(mobile);
+        User user=null;
+        if(userOptional.isPresent()){
+            user=userOptional.get();
+        }
         Playlist playlist=findPlaylist(mobile,playlistTitle);
 //        public HashMap<Playlist, List<User>> playlistListenerMap;
 //        public HashMap<User, Playlist> creatorPlaylistMap;
 //        public HashMap<User, List<Playlist>> userPlaylistMap;
         List<User> userList=playlistListenerMap.getOrDefault(playlist,new ArrayList<>());
-        userList.add(userOptional.get());
+        userList.add(user);
         playlistListenerMap.put(playlist,userList);
-        creatorPlaylistMap.put(userOptional.get(),playlist);
-        List<Playlist> playlistList=userPlaylistMap.getOrDefault(userOptional.get(),new ArrayList<>());
+        creatorPlaylistMap.put(user,playlist);
+        List<Playlist> playlistList=userPlaylistMap.getOrDefault(user,new ArrayList<>());
         playlistList.add(playlist);
-        userPlaylistMap.put(userOptional.get(),playlistList);
+        userPlaylistMap.put(user,playlistList);
     }
 
     public Optional<Song> findSong(String songTitle) {
