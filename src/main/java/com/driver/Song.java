@@ -2,6 +2,23 @@ package com.driver;
 
 public class Song {
     private String title;
+    private String albumName;
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public Song(String title, String albumName, int length) {
+        this.title = title;
+        this.albumName = albumName;
+        this.length = length;
+        this.likes=0;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
     private int length;
     private int likes;
 
@@ -12,6 +29,7 @@ public class Song {
     public Song(String title, int length){
         this.title = title;
         this.length = length;
+        this.likes=0;
     }
 
     public String getTitle() {
