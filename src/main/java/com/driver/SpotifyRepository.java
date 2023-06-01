@@ -250,14 +250,14 @@ public class SpotifyRepository {
         return Optional.empty();
     }
 
-    public void addAsListener(String mobile, String playlistTitle) throws Exception {
+    public void addAsListener(String mobile, String playlistTitle)  {
         Optional<User> userOptional=findUser(mobile);
         User user=null;
         if(userOptional.isPresent()){
             user=userOptional.get();
         }
 
-        Playlist playlist =findPlaylist(mobile,playlistTitle);
+        Playlist playlist = findingPlaylist(mobile,playlistTitle);
 //        public HashMap<Playlist, List<User>> playlistListenerMap;
 //        public HashMap<User, Playlist> creatorPlaylistMap;
 //        public HashMap<User, List<Playlist>> userPlaylistMap;
@@ -283,5 +283,14 @@ public class SpotifyRepository {
           }
       }
       return  Optional.empty();
+    }
+    public Playlist findingPlaylist(String mobile, String playlistTitle) {
+        for(Playlist playlist:playlists){
+            if(playlist.getTitle().equals(playlistTitle)){
+                return playlist;
+            }
+        }
+        return null;
+
     }
 }

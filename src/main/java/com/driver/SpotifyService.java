@@ -74,7 +74,7 @@ public class SpotifyService {
      return spotifyRepository.findUser(mobile);
     }
 
-    public void addaslistener(String mobile, String playlistTitle) throws Exception {
+    public void addaslistener(String mobile, String playlistTitle)  {
         spotifyRepository.addAsListener(mobile,playlistTitle);
         return;
     }
