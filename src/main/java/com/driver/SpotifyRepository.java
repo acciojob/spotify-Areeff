@@ -59,7 +59,9 @@ public class SpotifyRepository {
        // List<Album> albumsList=new ArrayList<>();
         albumsList.add(album);
         Optional<Artist> artist=findArtist(artistName);
-        artistAlbumMap.put(artist.get(),albumsList);
+        Artist artist1 = null;
+        if(artist.isPresent()) artist1 = artist.get();
+        artistAlbumMap.put(artist1,albumsList);
         return album;
     }
 
