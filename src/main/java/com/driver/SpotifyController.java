@@ -26,11 +26,11 @@ public class SpotifyController {
     }
 
     @PostMapping("/add-album")
-    public String createAlbum(@RequestParam(name = "title") String title, String artistName){
+    public Album createAlbum(@RequestParam(name = "title") String title, String artistName){
         //If the artist does not exist, first create an artist with given name
         //Create an album with given title and artist
-        Album album= spotifyService.createAlbum(title,artistName);
-        return "Success";
+         return  spotifyService.createAlbum(title,artistName);
+        //return "Success";
     }
 
     @PostMapping("/add-song")
