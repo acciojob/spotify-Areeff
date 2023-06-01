@@ -178,11 +178,27 @@ public class SpotifyRepository {
     }
 
     public String mostPopularArtist() {
-        return "null";
+        int mostLikes=0;
+        String name="";
+        for(Artist artist:artists){
+            if(artist.getLikes()>mostLikes){
+                mostLikes=artist.getLikes();
+                name=artist.getName();
+            }
+        }
+        return name;
     }
 
     public String mostPopularSong() {
-        return "null";
+        String name="";
+        int likes=0;
+        for(Song song:songs){
+            if(song.getLikes()>likes){
+                likes=song.getLikes();
+                name=song.getTitle();
+            }
+        }
+        return name;
     }
 
     public Optional<Artist> findArtist(String artistName) {
