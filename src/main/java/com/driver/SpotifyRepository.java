@@ -143,11 +143,36 @@ public class SpotifyRepository {
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
          Optional<User>userOptional=findUser(mobile);
+         User user=null;
+         if(userOptional.isPresent()){
+             user=userOptional.get();
+         }
          Optional<Song>songOptional=findSong(songTitle);
          Song song=songOptional.get();
-         songs.remove(song);
-         song.setLikes(song.getLikes()+1);
-         songs.add(song);
+
+      //  public HashMap<Artist, List<Album>> artistAlbumMap;
+       // public HashMap<Album, List<Song>> albumSongMap;
+        Album album=null;
+        for(Map.Entry<Album,List<Song>> map:albumSongMap.entrySet()){
+            if(map.getValue().contains(song)){
+                album=map.getKey();
+            }
+        }
+        Artist artist=null;
+        for(Map.Entry<Artist,List<Album>> Hashmap:artistAlbumMap.entrySet()){
+            if(Hashmap.getValue().contains(album)){
+                artist=Hashmap.getKey();
+            }
+        }
+        songs.remove(song);
+        song.setLikes(song.getLikes()+1);
+        songs.add(song);
+        artists.remove(artist);
+        artist.setLikes(artist.getLikes()+1);
+        artists.add(artist);
+        List<User> userList=songLikeMap.getOrDefault(song,new ArrayList<>());
+        userList.add(user);
+        songLikeMap.put(song,userList);
          return song;
     }
 
