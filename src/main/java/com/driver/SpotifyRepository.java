@@ -133,80 +133,199 @@ public class SpotifyRepository {
     }
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
-        for(Playlist playlist:playlists){
-            if(playlist.getTitle().equals(playlistTitle)){
-                return playlist;
+//        for(Playlist playlist:playlists){
+//            if(playlist.getTitle().equals(playlistTitle)){
+//                return playlist;
+//            }
+//        }
+//        return null;
+        User user = null;
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
+                break;
             }
         }
-        return null;
+        if(user==null)
+            throw new Exception("User does not exist");
+
+        Playlist playlist = null;
+        for(Playlist playlist1:playlists){
+            if(playlist1.getTitle()==playlistTitle){
+                playlist=playlist1;
+                break;
+            }
+        }
+        if(playlist==null)
+            throw new Exception("Playlist does not exist");
+
+        if(creatorPlaylistMap.containsKey(user))
+            return playlist;
+
+        List<User> listener = playlistListenerMap.get(playlist);
+        for(User user1:listener){
+            if(user1==user)
+                return playlist;
+        }
+
+        listener.add(user);
+        playlistListenerMap.put(playlist,listener);
+
+        List<Playlist> playlists1 = userPlaylistMap.get(user);
+        if(playlists1 == null){
+            playlists1 = new ArrayList<>();
+        }
+        playlists1.add(playlist);
+        userPlaylistMap.put(user,playlists1);
+
+        return playlist;
 
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
-         Optional<User>userOptional=findUser(mobile);
-         User user=null;
-         if(userOptional.isPresent()){
-             user=userOptional.get();
-         }
-         Optional<Song>songOptional=findSong(songTitle);
-         Song song=null;
-         if(songOptional.isPresent()) song=songOptional.get();
-
-//        public HashMap<Artist, List<Album>> artistAlbumMap;
-//        public HashMap<Album, List<Song>> albumSongMap;
-        if(songLikeMap.containsKey(song)){
-            List<User> userList=songLikeMap.get(song);
-            if(userList.contains(user)){
-                return song;
+//         Optional<User>userOptional=findUser(mobile);
+//         User user=null;
+//         if(userOptional.isPresent()){
+//             user=userOptional.get();
+//         }
+//         Optional<Song>songOptional=findSong(songTitle);
+//         Song song=null;
+//         if(songOptional.isPresent()) song=songOptional.get();
+//
+////        public HashMap<Artist, List<Album>> artistAlbumMap;
+////        public HashMap<Album, List<Song>> albumSongMap;
+//        if(songLikeMap.containsKey(song)){
+//            List<User> userList=songLikeMap.get(song);
+//            if(userList.contains(user)){
+//                return song;
+//            }
+//            else{
+//                int likes=song.getLikes()+1;
+//                song.setLikes(likes);
+//                userList.add(user);
+//                songLikeMap.put(song,userList);
+//                Album album=null;
+//                for(Map.Entry<Album,List<Song>> map:albumSongMap.entrySet()){
+//                    if(map.getValue().contains(song)){
+//                        album=map.getKey();
+//                        break;
+//                    }
+//                }
+//                Artist artist=null;
+//                for(Map.Entry<Artist,List<Album>> Hashmap:artistAlbumMap.entrySet()){
+//                    if(Hashmap.getValue().contains(album)){
+//                        artist=Hashmap.getKey();
+//                        break;
+//                    }
+//                }
+//                artist.setLikes(artist.getLikes()+1);
+//                artists.add(artist);
+//                return song;
+//            }
+//
+//        }else {
+//            Album album = null;
+//            for (Map.Entry<Album, List<Song>> map : albumSongMap.entrySet()) {
+//                if (map.getValue().contains(song)) {
+//                    album = map.getKey();
+//                    break;
+//                }
+//            }
+//            Artist artist = null;
+//            for (Map.Entry<Artist, List<Album>> Hashmap : artistAlbumMap.entrySet()) {
+//                if (Hashmap.getValue().contains(album)) {
+//                    artist = Hashmap.getKey();
+//                    break;
+//                }
+//            }
+//            //songs.remove(song);
+//            song.setLikes(song.getLikes() + 1);
+//            songs.add(song);
+//            //artists.remove(artist);
+//            artist.setLikes(artist.getLikes() + 1);
+//            artists.add(artist);
+//            List<User> userList = songLikeMap.getOrDefault(song, new ArrayList<>());
+//            userList.add(user);
+//            songLikeMap.put(song, userList);
+//            return song;
+        User user = null;
+        for(User user1:users){
+            if(user1.getMobile()==mobile){
+                user=user1;
+                break;
             }
-            else{
-                int likes=song.getLikes()+1;
+        }
+        if(user==null)
+            throw new Exception("User does not exist");
+
+        Song song = null;
+        for(Song song1:songs){
+            if(song1.getTitle()==songTitle){
+                song=song1;
+                break;
+            }
+        }
+        if (song==null)
+            throw new Exception("Song does not exist");
+
+        if(songLikeMap.containsKey(song)){
+            List<User> list = songLikeMap.get(song);
+            if(list.contains(user)){
+                return song;
+            }else {
+                int likes = song.getLikes() + 1;
                 song.setLikes(likes);
-                userList.add(user);
-                songLikeMap.put(song,userList);
+                list.add(user);
+                songLikeMap.put(song,list);
+
                 Album album=null;
-                for(Map.Entry<Album,List<Song>> map:albumSongMap.entrySet()){
-                    if(map.getValue().contains(song)){
-                        album=map.getKey();
+                for(Album album1:albumSongMap.keySet()){
+                    List<Song> songList = albumSongMap.get(album1);
+                    if(songList.contains(song)){
+                        album = album1;
                         break;
                     }
                 }
-                Artist artist=null;
-                for(Map.Entry<Artist,List<Album>> Hashmap:artistAlbumMap.entrySet()){
-                    if(Hashmap.getValue().contains(album)){
-                        artist=Hashmap.getKey();
+                Artist artist = null;
+                for(Artist artist1:artistAlbumMap.keySet()){
+                    List<Album> albumList = artistAlbumMap.get(artist1);
+                    if (albumList.contains(album)){
+                        artist = artist1;
                         break;
                     }
                 }
-                artist.setLikes(artist.getLikes()+1);
+                int likes1 = artist.getLikes() +1;
+                artist.setLikes(likes1);
                 artists.add(artist);
                 return song;
             }
-
         }else {
-            Album album = null;
-            for (Map.Entry<Album, List<Song>> map : albumSongMap.entrySet()) {
-                if (map.getValue().contains(song)) {
-                    album = map.getKey();
+            int likes = song.getLikes() + 1;
+            song.setLikes(likes);
+            List<User> list = new ArrayList<>();
+            list.add(user);
+            songLikeMap.put(song,list);
+
+            Album album=null;
+            for(Album album1:albumSongMap.keySet()){
+                List<Song> songList = albumSongMap.get(album1);
+                if(songList.contains(song)){
+                    album = album1;
                     break;
                 }
             }
             Artist artist = null;
-            for (Map.Entry<Artist, List<Album>> Hashmap : artistAlbumMap.entrySet()) {
-                if (Hashmap.getValue().contains(album)) {
-                    artist = Hashmap.getKey();
+            for(Artist artist1:artistAlbumMap.keySet()){
+                List<Album> albumList = artistAlbumMap.get(artist1);
+                if (albumList.contains(album)){
+                    artist = artist1;
                     break;
                 }
             }
-            //songs.remove(song);
-            song.setLikes(song.getLikes() + 1);
-            songs.add(song);
-            //artists.remove(artist);
-            artist.setLikes(artist.getLikes() + 1);
+            int likes1 = artist.getLikes() +1;
+            artist.setLikes(likes1);
             artists.add(artist);
-            List<User> userList = songLikeMap.getOrDefault(song, new ArrayList<>());
-            userList.add(user);
-            songLikeMap.put(song, userList);
+
             return song;
         }
     }
